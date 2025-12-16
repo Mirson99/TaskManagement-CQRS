@@ -2,27 +2,28 @@
 using TaskManagement.Application.Abstractions;
 using TaskManagement.Application.Queries.GetAllTasks;
 using TaskManagement.Infrastructure.Data;
+using TaskManagement.Infrastructure.Repositories;
 
 namespace TaskManagement.Infrastructure.Handlers.Queries;
 
 public class GetAllTasksQueryHandler: IQueryHandler<GetAllTasksQuery, List<TaskDto>>
 {
-    private readonly TaskDbContext _taskDbContext;
+    private readonly ITaskRepository _taskRepository;
     
-    public GetAllTasksQueryHandler(TaskDbContext taskDbContext)
+    public GetAllTasksQueryHandler(ITaskRepository taskRepository)
     {
-        _taskDbContext = taskDbContext;
+        _taskRepository = taskRepository;
     }
     public async Task<List<TaskDto>> Handle(GetAllTasksQuery query, CancellationToken cancellationToken)
     {
-        return await _taskDbContext.Tasks.Select(t => new TaskDto
+        var tasks = await _taskRepository.GetAllAsync(cancellationToken);
+    
+        return tasks.Select(t => new TaskDto
         {
             Id = t.Id,
             Title = t.Title,
             IsCompleted = t.IsCompleted,
-            CreatedAt = t.CreatedAt   
-        }).ToListAsync(cancellationToken);
-        
-        
+            CreatedAt = t.CreatedAt
+        }).ToList();        
     }
 }

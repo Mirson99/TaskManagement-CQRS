@@ -1,20 +1,22 @@
 ﻿using TaskManagement.Application.Abstractions;
 using TaskManagement.Application.Commands.CompleteTask;
 using TaskManagement.Infrastructure.Data;
+using TaskManagement.Infrastructure.Repositories;
 
 namespace TaskManagement.Infrastructure.Handlers;
 
 public class CompleteTaskCommandHandler: ICommandHandler<CompleteTaskCommand, bool>
 {
     private readonly TaskDbContext _taskDbContext;
+    private readonly ITaskRepository _taskRepository;
     
-    public CompleteTaskCommandHandler(TaskDbContext taskDbContext)
+    public CompleteTaskCommandHandler(ITaskRepository taskRepository)
     {
-        _taskDbContext = taskDbContext;
+        _taskRepository = taskRepository;
     }
     public async Task<bool> Handle(CompleteTaskCommand command, CancellationToken cancellationToken)
     {
-        var task = await _taskDbContext.Tasks.FindAsync(command.TaskId, cancellationToken);
+        var task = await _taskRepository.GetByIdAsync(command.TaskId, cancellationToken);
         if (task is null)
             return false;
 
@@ -22,7 +24,7 @@ public class CompleteTaskCommandHandler: ICommandHandler<CompleteTaskCommand, bo
             return true;
 
         task.IsCompleted = true;
-        await _taskDbContext.SaveChangesAsync(cancellationToken);
+        await _taskRepository.UpdateAsync(task, cancellationToken);
         return true;
     }
 }

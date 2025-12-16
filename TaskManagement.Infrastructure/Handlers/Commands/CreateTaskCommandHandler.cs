@@ -2,32 +2,31 @@
 using TaskManagement.Application.Commands.CreateTask;
 using TaskManagement.Domain.Entities;
 using TaskManagement.Infrastructure.Data;
+using TaskManagement.Infrastructure.Repositories;
 
 
 namespace TaskManagement.Infrastructure.Handlers;
 
 public class CreateTaskCommandHandler: ICommandHandler<CreateTaskCommand, int>
 {
-    private readonly TaskDbContext _taskDbContext;
-    
-    public CreateTaskCommandHandler(TaskDbContext taskDbContext)
+    private readonly ITaskRepository _taskRepository;
+    public CreateTaskCommandHandler(ITaskRepository taskRepository)
     {
-        _taskDbContext = taskDbContext;
+        _taskRepository = taskRepository;
     }
     
-    public async Task<int> Handle(CreateTaskCommand command, CancellationToken cancellationToken)
-    {
-        var task = new TaskItem
+        public async Task<int> Handle(CreateTaskCommand command, CancellationToken cancellationToken)
         {
-            Title = command.Title,
-            Description = command.Description,
-            IsCompleted = false,
-            CreatedAt = DateTime.UtcNow
-        };
-        
-        _taskDbContext.Tasks.Add(task);
-        await _taskDbContext.SaveChangesAsync(cancellationToken);
-        
-        return task.Id;
-    }
+            var task = new TaskItem
+            {
+                Title = command.Title,
+                Description = command.Description,
+                IsCompleted = false,
+                CreatedAt = DateTime.UtcNow
+            };
+            
+            await _taskRepository.AddAsync(task, cancellationToken);
+            
+            return task.Id;
+        }
 }

@@ -2,26 +2,25 @@
 using TaskManagement.Application.Commands.CompleteTask;
 using TaskManagement.Application.Commands.DeleteTask;
 using TaskManagement.Infrastructure.Data;
+using TaskManagement.Infrastructure.Repositories;
 
 namespace TaskManagement.Infrastructure.Handlers;
 
 
 public class DeleteTaskCommandHandler: ICommandHandler<DeleteTaskCommand, bool>
 {
-    private readonly TaskDbContext _taskDbContext;
-    
-    public DeleteTaskCommandHandler(TaskDbContext taskDbContext)
+    private readonly ITaskRepository  _taskRepository;
+    public DeleteTaskCommandHandler(ITaskRepository taskRepository)
     {
-        _taskDbContext = taskDbContext;
+        _taskRepository = taskRepository;
     }
 
     public async Task<bool> Handle(DeleteTaskCommand command, CancellationToken cancellationToken)
     {
-        var task = await _taskDbContext.Tasks.FindAsync(command.TaskId, cancellationToken);
+        var task = await _taskRepository.GetByIdAsync(command.TaskId, cancellationToken);
         if (task is null)
             return false;
-        _taskDbContext.Tasks.Remove(task);
-        await _taskDbContext.SaveChangesAsync(cancellationToken);
+        await _taskRepository.RemoveAsync(task, cancellationToken);
         return true;
     }
 }

@@ -2,29 +2,31 @@
 using TaskManagement.Application.Abstractions;
 using TaskManagement.Application.Queries.GetTaskById;
 using TaskManagement.Infrastructure.Data;
+using TaskManagement.Infrastructure.Repositories;
 
 namespace TaskManagement.Infrastructure.Handlers.Queries;
 
 public class GetTaskByIdQueryHandler: IQueryHandler<GetTaskByIdQuery, TaskDetailsDto>
 {
-    private TaskDbContext _taskDbContext;
-    
-    public GetTaskByIdQueryHandler(TaskDbContext taskDbContext)
+    private ITaskRepository _taskRepository;
+    public GetTaskByIdQueryHandler(ITaskRepository taskRepository)
     {
-        _taskDbContext = taskDbContext;
+        _taskRepository = taskRepository;
     }
 
     public async Task<TaskDetailsDto> Handle(GetTaskByIdQuery query, CancellationToken cancellationToken)
     {
-        return await _taskDbContext.Tasks
-            .Where(t => t.Id == query.TaskId)
-            .Select(t => new TaskDetailsDto
-            {
-                Id = t.Id,
-                Title = t.Title,
-                Description = t.Description,
-                IsCompleted = t.IsCompleted,
-                CreatedAt = t.CreatedAt,
-            }).FirstOrDefaultAsync();
+        var task = await _taskRepository.GetByIdAsync(query.TaskId, cancellationToken);
+        if (task is null)
+            return null;
+    
+        return new TaskDetailsDto
+        {
+            Id = task.Id,
+            Title = task.Title,
+            Description = task.Description,
+            IsCompleted = task.IsCompleted,
+            CreatedAt = task.CreatedAt
+        };
     }
 }
