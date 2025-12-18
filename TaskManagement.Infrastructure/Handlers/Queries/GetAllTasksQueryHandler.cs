@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TaskManagement.Application.Abstractions;
+﻿using TaskManagement.Application.Abstractions;
 using TaskManagement.Application.Queries.GetAllTasks;
-using TaskManagement.Infrastructure.Data;
 using TaskManagement.Infrastructure.Repositories;
 
 namespace TaskManagement.Infrastructure.Handlers.Queries;

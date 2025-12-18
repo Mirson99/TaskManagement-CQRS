@@ -1,7 +1,5 @@
 ﻿using TaskManagement.Application.Abstractions;
-using TaskManagement.Application.Commands.CompleteTask;
 using TaskManagement.Application.Commands.DeleteTask;
-using TaskManagement.Infrastructure.Data;
 using TaskManagement.Infrastructure.Repositories;
 
 namespace TaskManagement.Infrastructure.Handlers;

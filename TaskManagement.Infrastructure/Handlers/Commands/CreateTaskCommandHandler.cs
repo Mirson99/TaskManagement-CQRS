@@ -1,7 +1,6 @@
 ﻿using TaskManagement.Application.Abstractions;
 using TaskManagement.Application.Commands.CreateTask;
 using TaskManagement.Domain.Entities;
-using TaskManagement.Infrastructure.Data;
 using TaskManagement.Infrastructure.Repositories;
 
 

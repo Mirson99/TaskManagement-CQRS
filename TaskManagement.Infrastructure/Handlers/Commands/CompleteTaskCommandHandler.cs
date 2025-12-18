@@ -1,13 +1,11 @@
 ﻿using TaskManagement.Application.Abstractions;
 using TaskManagement.Application.Commands.CompleteTask;
-using TaskManagement.Infrastructure.Data;
 using TaskManagement.Infrastructure.Repositories;
 
 namespace TaskManagement.Infrastructure.Handlers;
 
 public class CompleteTaskCommandHandler: ICommandHandler<CompleteTaskCommand, bool>
 {
-    private readonly TaskDbContext _taskDbContext;
     private readonly ITaskRepository _taskRepository;
     
     public CompleteTaskCommandHandler(ITaskRepository taskRepository)
