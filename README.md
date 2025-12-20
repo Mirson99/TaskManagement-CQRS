@@ -100,11 +100,5 @@ Global middleware catches and formats errors:
 
 ## 🧪 Testing
 
-Planned test coverage:
 - Unit tests for all command/query handlers
 - Integration tests for API endpoints
-- Target: 80%+ code coverage
-
-## 🔮 Future Improvements
-
-- [ ] Add comprehensive test suite (xUnit + FluentAssertions)
