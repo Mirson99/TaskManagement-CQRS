@@ -106,6 +106,11 @@ public class TasksController : ControllerBase
         return NoContent();
     }
 }
+
+public class CreateTaskResponse
+{
+    public int Id { get; set; }
+}
 public class CreateTaskRequest
 {
     public string Title { get; set; } = string.Empty;

@@ -21,7 +21,8 @@ public class CreateTaskCommandHandler: ICommandHandler<CreateTaskCommand, int>
                 Title = command.Title,
                 Description = command.Description,
                 IsCompleted = false,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                DueAt = command.DueAt,
             };
             
             await _taskRepository.AddAsync(task, cancellationToken);

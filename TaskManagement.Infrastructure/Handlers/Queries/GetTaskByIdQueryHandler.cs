@@ -24,7 +24,8 @@ public class GetTaskByIdQueryHandler: IQueryHandler<GetTaskByIdQuery, TaskDetail
             Title = task.Title,
             Description = task.Description,
             IsCompleted = task.IsCompleted,
-            CreatedAt = task.CreatedAt
+            CreatedAt = task.CreatedAt,
+            DueAt = task.DueAt,
         };
     }
 }
